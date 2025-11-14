@@ -1,0 +1,11 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[user]
+	email = user@example.com
+	name = Stock Advisor User
+[remote "origin"]
+	url = https://github.com/randomrbgcolor/stock-adviser.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
