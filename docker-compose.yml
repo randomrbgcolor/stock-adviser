@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  stock-advisor:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      # Database Configuration
+      - DATABASE_URL=${DATABASE_URL}
+      
+      # API Keys (REQUIRED - Set these in .env file)
+      - ALPHA_VANTAGE_API_KEY=${ALPHA_VANTAGE_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      
+      # JWT Secret for session management
+      - JWT_SECRET=${JWT_SECRET:-your-secret-key-change-this}
+      
+      # OAuth Configuration (if using Manus OAuth)
+      - OAUTH_SERVER_URL=${OAUTH_SERVER_URL:-https://api.manus.im}
+      - VITE_OAUTH_PORTAL_URL=${VITE_OAUTH_PORTAL_URL:-https://auth.manus.im}
+      - VITE_APP_ID=${VITE_APP_ID}
+      
+      # Owner Information
+      - OWNER_OPEN_ID=${OWNER_OPEN_ID}
+      - OWNER_NAME=${OWNER_NAME}
+      
+      # Application Configuration
+      - VITE_APP_TITLE=${VITE_APP_TITLE:-Stock Analysis & Portfolio Advisor}
+      - VITE_APP_LOGO=${VITE_APP_LOGO:-/logo.svg}
+      
+      # Built-in Forge API (if using Manus platform features)
+      - BUILT_IN_FORGE_API_URL=${BUILT_IN_FORGE_API_URL}
+      - BUILT_IN_FORGE_API_KEY=${BUILT_IN_FORGE_API_KEY}
+      - VITE_FRONTEND_FORGE_API_KEY=${VITE_FRONTEND_FORGE_API_KEY}
+      - VITE_FRONTEND_FORGE_API_URL=${VITE_FRONTEND_FORGE_API_URL}
+      
+      # Analytics (optional)
+      - VITE_ANALYTICS_ENDPOINT=${VITE_ANALYTICS_ENDPOINT}
+      - VITE_ANALYTICS_WEBSITE_ID=${VITE_ANALYTICS_WEBSITE_ID}
+      
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
